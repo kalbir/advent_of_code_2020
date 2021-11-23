@@ -11,4 +11,12 @@ defmodule DataManipulation do
     |> Enum.map(fn x -> String.split(x, ~r{\t}, parts: :infinity) end)
     |> List.flatten()
   end
+
+  def split_on_newline(file) do
+    file
+    |> File.read!()
+    |> String.split("\n\n", trim: true)
+    |> Enum.map(&String.replace(&1, "\n", " "))
+    |> Enum.map(&String.trim(&1, " ")) 
+  end
 end
