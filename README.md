@@ -1,21 +1,11 @@
 # AdventOfCode2020
 
-**TODO: Add description**
+Doing the [Advent of Code 2020](https://adventofcode.com/2020) in Elixir. My third year that I've tried (2017 - 6*, 2018 - 5*).
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `advent_of_code_2020` to your list of dependencies in `mix.exs`:
+I guess I should be using docker for this but I've mainly be doing:
 
-```elixir
-def deps do
-  [
-    {:advent_of_code_2020, "~> 0.1.0"}
-  ]
-end
-```
+`iex -S mix`
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/advent_of_code_2020](https://hexdocs.pm/advent_of_code_2020).
-
+to get the iex env loaded. 
