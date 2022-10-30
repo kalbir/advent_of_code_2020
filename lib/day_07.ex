@@ -21,9 +21,41 @@ defmodule Day07 do
        |> Enum.count
   end
 
+  def solution_2(file) do
+    file
+      |> DataManipulation.file_to_list
+      |> Enum.map(fn x -> String.split(x) end)
+  end
+
   # This will make the list of bags that can contain $bag
   # We'll use in in `a_function` to pass different bags of one layer
   # in and get the bags they are contained in (i.e. the next layer)
+
+  @doc """
+  Takes a string for the name of the bag that is on the inside, and a list of tuples of the form `{"bag_1", "bag_2"}`, where `bag_2` contains `bag_1`..
+  Returns a list of bags that contain `bag`.
+
+  ## Examples
+      iex> map = [
+  {"bw", "lr"},
+  {"my", "lr"},
+  {"bw", "do"},
+  {"my", "do"},
+  {"sg", "bw"},
+  {"sg", "my"},
+  {"fb", "my"},
+  {"dol", "sg"},
+  {"vp", "sg"},
+  {"fb", "dol"},
+  {"dobl", "dol"},
+  {"fb", "vp"},
+  {"dobl", "vp"},
+  {"none", "fb"},
+  {"none", "dobl"}
+      ]
+      iex> Day07.find_containing_bags("sg", map) 
+      ["bw", "my"]
+  """
   def find_containing_bags(bag, struct) do
     Enum.filter(struct, fn {a, _} -> a == bag end)
       |> Enum.map(fn {_, b} -> b end)
@@ -54,6 +86,29 @@ defmodule Day07 do
     a_function(next_layer, map, total_layers)
   end
 
+
+  # Part 2 function. Make the map, key is the "layer", value is the
+  # set of info we need to compute that layer. i.e. the lists that
+  # are needed for that layer.
+  
+  def layer_map(struct, list_of_bags) do
+    Enum.filter(struct, fn x -> Enum.filter(list_of_bags, fn y -> List.first(x) == y end) != [] end) 
+  end
+
+  # Takes the output of `layer map` and works out what the sum of all bags
+  # at that layer is. Needs to be multiplied by the higher layer number.
+  def sum_in_a_layer(list_of_relations) do
+     Enum.filter(list_of_relations, fn x -> numbers_only(x) end)
+  end
+
+  defp numbers_only(thing) do 
+    case thing do
+      thing when is_integer(thing) -> true
+      _                            -> false
+    end
+  end
+
+  
   # Function to turn the string into something mangeable. OMG. 
   def data_munge([a, b, _c, _d, _e, f, g, _h, _i, j, k, _l, _m, n, o, _p, _q, r, s, _t]) do
     [{"#{f} #{g}","#{a} #{b}"}, {"#{j} #{k}", "#{a} #{b}"}, {"#{n} #{o}", "#{a} #{b}"}, {"#{r} #{s}", "#{a} #{b}"}]
@@ -73,5 +128,26 @@ defmodule Day07 do
 
   def data_munge([a, b, _c, _d, _e, _f, _g]) do
     [{"none","#{a} #{b}"}]
+  end
+
+  # Data munge part 2. Will look up if there is something better here.
+  def number_munge([a, b, _c, _d, e, f, g, _h, i, j, k, _l, m, n, o, _p, q, r, s, _t]) do
+    ["#{a} #{b}", String.to_integer(e), "#{f} #{g}", String.to_integer(i), "#{j} #{k}", String.to_integer(m), "#{n} #{o}", String.to_integer(q), "#{r} #{s}"]
+  end
+  
+  def number_munge([a, b, _c, _d, e, f, g, _h, i, j, k, _l, m, n, o, _p]) do
+    ["#{a} #{b}", String.to_integer(e), "#{f} #{g}", String.to_integer(i), "#{j} #{k}", String.to_integer(m), "#{n} #{o}"]
+  end
+  
+  def number_munge([a, b, _c, _d, e, f, g, _h, i, j, k, _l]) do
+    ["#{a} #{b}", String.to_integer(e), "#{f} #{g}", String.to_integer(i), "#{j} #{k}"]
+  end
+  
+  def number_munge([a, b, _c, _d, e, f, g, _h]) do
+    ["#{a} #{b}", String.to_integer(e), "#{f} #{g}"]
+  end
+
+  def number_munge([a, b, _c, _d, _e, _f, _g]) do
+    ["#{a} #{b}", "0"]
   end
 end
