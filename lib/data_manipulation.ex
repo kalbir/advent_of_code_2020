@@ -8,7 +8,7 @@ defmodule DataManipulation do
   def file_to_list_of_units(file) do
     file
     |> file_to_list
-    |> Enum.map(fn x -> String.split(x, ~r{\t}, parts: :infinity) end)
+    |> Enum.map(fn x -> String.split(x, " ", parts: :infinity) end)
     |> List.flatten()
   end
 
@@ -17,6 +17,6 @@ defmodule DataManipulation do
     |> File.read!()
     |> String.split("\n\n", trim: true)
     |> Enum.map(&String.replace(&1, "\n", " "))
-    |> Enum.map(&String.trim(&1, " ")) 
+    |> Enum.map(&String.trim(&1, " "))
   end
 end
